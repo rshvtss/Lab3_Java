@@ -1,0 +1,11 @@
+com\mycompany\skiresort\SeasonSkiPass.class
+com\mycompany\skiresort\Turnstile.class
+com\mycompany\skiresort\PassCategory.class
+com\mycompany\skiresort\PassEventType.class
+com\mycompany\skiresort\SkiPassRegistry.class
+com\mycompany\skiresort\TimeBasedSkiPass.class
+com\mycompany\skiresort\PassEvent.class
+com\mycompany\skiresort\SkiPass.class
+com\mycompany\skiresort\TimeBasedSkiPass$HalfDayMode.class
+com\mycompany\skiresort\SkiPassTurnstileDemo.class
+com\mycompany\skiresort\CountBasedSkiPass.class
