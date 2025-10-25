@@ -3,6 +3,7 @@ package com.mycompany.skiresort;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.UUID;
 
 public class SkiPassRegistry {
     private final Map<UUID, SkiPass> store = new ConcurrentHashMap<>();
@@ -13,8 +14,9 @@ public class SkiPassRegistry {
         return pass;
     }
 
-    public SkiPass issueCountBased(int rides, LocalDate from, LocalDate to) {
-        CountBasedSkiPass pass = new CountBasedSkiPass(rides, from, to);
+    // нова сигнатура: додаємо forWorkdays, щоб розрізняти робочі/вихідні count-based
+    public SkiPass issueCountBased(int rides, boolean forWorkdays, LocalDate from, LocalDate to) {
+        CountBasedSkiPass pass = new CountBasedSkiPass(rides, forWorkdays, from, to);
         store.put(pass.getId(), pass);
         return pass;
     }

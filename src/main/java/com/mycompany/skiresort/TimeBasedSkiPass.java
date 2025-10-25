@@ -21,25 +21,26 @@ public class TimeBasedSkiPass extends SkiPass {
         DayOfWeek dow = when.getDayOfWeek();
         boolean isWeekend = (dow == DayOfWeek.SATURDAY || dow == DayOfWeek.SUNDAY);
 
-        if (forWorkdays && isWeekend) return Optional.of("Pass working only on Monday-Friday");
-        if (!forWorkdays && !isWeekend) return Optional.of("Pass working only on weekends");
+        if (forWorkdays && isWeekend) return Optional.of("Пропуск діє лише в робочі дні");
+        if (!forWorkdays && !isWeekend) return Optional.of("Пропуск діє лише у вихідні");
 
-        if (halfDayMode != null) {
-            LocalTime t = when.toLocalTime();
-            switch (halfDayMode) {
-                case MORNING:
-                    if (t.isBefore(LocalTime.of(9,0)) || t.isAfter(LocalTime.of(13,0)))
-                        return Optional.of("Working only at 9 a.m - 1 p.m.");
-                    break;
-                case AFTERNOON:
-                    if (t.isBefore(LocalTime.of(13,0)) || t.isAfter(LocalTime.of(17,0)))
-                        return Optional.of("Working only at 1 p.m. - 5 p.m.");
-                    break;
-                case FULL_DAY:
-                    if (t.isBefore(LocalTime.of(9,0)) || t.isAfter(LocalTime.of(17,0)))
-                        return Optional.of("Working only at 9 a.m. - 5 p.m.");
-                    break;
-            }
+        LocalTime t = when.toLocalTime();
+        switch (halfDayMode) {
+            case MORNING:
+                // Діапазон [09:00,13:00) — 13:00 належить до AFTERNOON
+                if (t.isBefore(LocalTime.of(9,0)) || !t.isBefore(LocalTime.of(13,0)))
+                    return Optional.of("Діє тільки з 09:00 до 13:00 (ранкова зміна)");
+                break;
+            case AFTERNOON:
+                // Діапазон [13:00,17:00)
+                if (t.isBefore(LocalTime.of(13,0)) || !t.isBefore(LocalTime.of(17,0)))
+                    return Optional.of("Діє тільки з 13:00 до 17:00 (післяполуднева зміна)");
+                break;
+            case FULL_DAY:
+                // Діапазон [09:00,17:00)
+                if (t.isBefore(LocalTime.of(9,0)) || !t.isBefore(LocalTime.of(17,0)))
+                    return Optional.of("Діє тільки з 09:00 до 17:00 (робочий день)");
+                break;
         }
         return Optional.empty();
     }
